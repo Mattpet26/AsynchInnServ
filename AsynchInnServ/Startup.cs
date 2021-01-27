@@ -1,4 +1,6 @@
 using AsynchInnServ.Data;
+using AsynchInnServ.Models.Interface;
+using AsynchInnServ.Models.Interface.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +30,12 @@ namespace AsynchInnServ
             });
             services.AddMvc();
             services.AddControllers();
-            //testing the break
+
+
+            services.AddTransient<IHotel, HotelRepository>();
+            services.AddTransient<IRoom, RoomRepository>();
+            services.AddTransient<IAmmenities, AmmenityRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

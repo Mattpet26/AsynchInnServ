@@ -11,5 +11,10 @@ namespace AsynchInnServ.Models
         public string Name { get; set; }
         public string Layout { get; set; }
         public List<Ammenities> Ammenities { get; set; }
+
+        public static implicit operator Room(Hotel v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
