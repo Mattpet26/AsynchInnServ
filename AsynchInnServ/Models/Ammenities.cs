@@ -9,6 +9,5 @@ namespace AsynchInnServ.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<RoomAmmenities> RoomAmenities { get; set; }
     }
 }
