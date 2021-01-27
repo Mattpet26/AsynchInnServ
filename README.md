@@ -19,3 +19,4 @@ C# + .NET
 
 ## Change Log
 01/26/2021 - initial upload of the lab! Stay tuned for more.
+01/27/2021 - Dependency Injection succsessful 
