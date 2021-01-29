@@ -16,6 +16,24 @@ namespace AsynchInnServ.Models.Interface.Services
             _context = context;
         }
 
+        public async Task AddRoomAmmenities(int ammenityId, int roomId)
+        {
+            RoomAmmenities ammenity = new RoomAmmenities()
+            {
+                AmmenityId = ammenityId,
+                RoomId = roomId
+            };
+            _context.Entry(ammenity).State = EntityState.Added;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveRoomAmmenities(int ammenityId, int roomId)
+        {
+            var result = await _context.RoomAmmenities.FirstOrDefaultAsync(x => x.AmmenityId == ammenityId && x.RoomId == roomId);
+            _context.Entry(result).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Room> CreateRoom(Room room)
         {
             _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Added;
@@ -32,16 +50,19 @@ namespace AsynchInnServ.Models.Interface.Services
 
         public async Task<Room> GetRoom(int id)
         {
-            Room room = await _context.Hotels.FindAsync(id);
-            return room;
+            return await _context.Rooms
+                .Include(x => x.HotelRoom)
+                .ThenInclude(x => x.Hotel)
+                .FirstOrDefaultAsync(x => x.RoomId == id);
         }
 
         public async Task<List<Room>> GetRooms()
         {
-            var rooms = await _context.Rooms.ToListAsync();
-            return rooms;
+            return await _context.Rooms
+                .Include(x => x.HotelRoom)
+                .ThenInclude(x => x.Hotel)
+                .ToListAsync();
         }
-
 
         public async Task<Room> UpdateRoom(Room room)
         {

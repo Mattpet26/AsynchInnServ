@@ -7,15 +7,38 @@ namespace AsynchInnServ.Models.Interface
 {
     public interface IHotel
     {
-        //CRUD
+        /// <summary>
+        /// Creates a new hotel
+        /// </summary>
+        /// <param name="hotel">Unique hotel created</param>
+        /// <returns>created hotel </returns>
         Task<Hotel> CreateHotel(Hotel hotel);
 
+        /// <summary>
+        /// Gets a single hotel
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>single hotel</returns>
         Task<Hotel> GetHotel(int id);
 
+        /// <summary>
+        /// Gets a list of all hotels
+        /// </summary>
+        /// <returns>list of hotels</returns>
         Task<List<Hotel>> GetHotels();
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hotel">updates a unique hotel</param>
+        /// <returns>updated hotel</returns>
         Task<Hotel> UpdateHotel(Hotel hotel);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">deletes a unique hotel based off id</param>
+        /// <returns>nothing</returns>
         Task DeleteHotel(int id);
     }
 }

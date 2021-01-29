@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210128231207_added-hotelrooms.cs" />
+    <Compile Remove="Migrations\20210128231207_added-hotelrooms.Designer.cs" />
+    <Compile Remove="Migrations\20210129001039_update-ammenities.cs" />
+    <Compile Remove="Migrations\20210129001039_update-ammenities.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.11">

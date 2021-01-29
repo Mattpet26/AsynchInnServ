@@ -26,7 +26,7 @@ namespace AsynchInnServ.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
         {
-            return Ok(await _room.GetRooms());
+            return await _room.GetRooms();
         }
 
         // GET: api/Rooms/5
@@ -43,13 +43,27 @@ namespace AsynchInnServ.Controllers
             return room;
         }
 
+        [HttpPost("{roomId}/Amenity/{amenityId}")]
+        public async Task<ActionResult> AddRoomAmenityToRoom(int amenityId, int roomId)
+        {
+            await _room.AddRoomAmmenities(amenityId, roomId);
+            return Ok();
+        }
+
+        [HttpDelete("{roomId}/Amenity/{amenityId}")]
+        public async Task<ActionResult> RemoveRoomAmenityFromRoom(int amenityId, int roomId)
+        {
+            await _room.RemoveRoomAmmenities(amenityId, roomId);
+            return Ok();
+        }
+
         // PUT: api/Rooms/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRoom(int id, Room room)
         {
-            if (id != room.Id)
+            if (id != room.RoomId)
             {
                 return BadRequest();
             }
@@ -65,7 +79,7 @@ namespace AsynchInnServ.Controllers
         public async Task<ActionResult<Room>> PostRoom(Room room)
         {
             await _room.CreateRoom(room);
-            return CreatedAtAction("GetRooms", new { id=room.Id}, room);
+            return CreatedAtAction("GetRooms", new { id=room.RoomId }, room);
         }
 
         // DELETE: api/Rooms/5
