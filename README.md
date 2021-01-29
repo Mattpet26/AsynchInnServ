@@ -12,7 +12,9 @@ Hit the green play button and wait for your browser window to open
 You will be brought to 'Hello World'. But you can try /api/Hotels to view all the hotels in my api! How neat!
 
 ## Example
-Images will be uploaded soon
+![image](getRooms)
+![image](getAmmenities)
+![image](getHotels)
 
 ## Architecture
 C# + .NET
