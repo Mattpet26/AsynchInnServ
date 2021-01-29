@@ -7,14 +7,14 @@ namespace AsynchInnServ.Models
 {
     public class Room
     {
-        public int Id { get; set; }
+        //comp key
+        public int RoomId { get; set; }
+
         public string Name { get; set; }
         public string Layout { get; set; }
-        public List<Ammenities> Ammenities { get; set; }
 
-        public static implicit operator Room(Hotel v)
-        {
-            throw new NotImplementedException();
-        }
+        //navigation properties
+        public List<RoomAmmenities> RoomAmmenities { get; set; }
+        public List<HotelRoom> HotelRoom { get; set; }
     }
 }

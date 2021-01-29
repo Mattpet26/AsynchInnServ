@@ -35,7 +35,11 @@ namespace AsynchInnServ
             services.AddTransient<IHotel, HotelRepository>();
             services.AddTransient<IRoom, RoomRepository>();
             services.AddTransient<IAmmenities, AmmenityRepository>();
+            services.AddTransient<IHotelRoom, HotelRoomRepository>();
 
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+          );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +49,7 @@ namespace AsynchInnServ
             {
                 app.UseDeveloperExceptionPage();
             }
+            //push
 
             app.UseRouting();
 
