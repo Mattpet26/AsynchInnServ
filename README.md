@@ -20,7 +20,7 @@ Lastly, select and open the AsyncInnServ.sln
 You can now run the program with the green start button!
 
 ## Example
-![image](HotelSetup.PNG)
+![image](hotelSetup.PNG)
 ![image](getRooms.PNG)
 ![image](getAmmenities.PNG)
 
