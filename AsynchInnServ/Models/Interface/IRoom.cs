@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AsynchInnServ.Models.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,27 +13,27 @@ namespace AsynchInnServ.Models.Interface
         /// </summary>
         /// <param name="room">Room being added</param>
         /// <returns>created room</returns>
-        Task<Room> CreateRoom(Room room);
+        Task<RoomDTO> CreateRoom(RoomDTO room);
 
         /// <summary>
         /// Gets all the rooms for the hotel
         /// </summary>
         /// <returns> list of rooms</returns>
-        Task<List<Room>> GetRooms();
+        Task<List<RoomDTO>> GetRooms();
 
         /// <summary>
         /// Gets a single room for the hotel
         /// </summary>
         /// <param name="id">Gets unique id for the room</param>
         /// <returns>single room</returns>
-        Task<Room> GetRoom(int id);
+        Task<RoomDTO> GetRoom(int id);
 
         /// <summary>
         /// Updates a room in the hotel
         /// </summary>
         /// <param name="room">Updates the unique room</param>
         /// <returns>updatedroom</returns>
-        Task<Room> UpdateRoom(Room room);
+        Task<RoomDTO> UpdateRoom(RoomDTO room);
 
         /// <summary>
         /// Deletes a room in the hotel

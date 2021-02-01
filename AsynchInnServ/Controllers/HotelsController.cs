@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
+using AsynchInnServ.Models.Api;
 
 namespace AsynchInnServ.Controllers
 {
@@ -24,19 +25,19 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Hotels
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Hotel>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelDTO>>> GetHotels()
         {
             return Ok(await _hotel.GetHotels());
         }
 
         // GET: api/Hotels/5
-        //the 5 - {id} === a pattern match
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hotel>> GetHotel(int id)
+        public async Task<ActionResult<HotelDTO>> GetHotel(int id)
         {
             //SELECT * FROM hotel WHERE id = {id}
-            Hotel hotel = await _hotel.GetHotel(id);
+            HotelDTO hotel = await _hotel.GetHotel(id);
 
+            //Hotel hotel = await _hotel.GetHotel(id);
             if (hotel == null)
             {
                 return NotFound();
@@ -46,8 +47,6 @@ namespace AsynchInnServ.Controllers
         }
 
         // PUT: api/Hotels/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
@@ -56,13 +55,11 @@ namespace AsynchInnServ.Controllers
                 return BadRequest();
             }
 
-            var updateHotel = await _hotel.UpdateHotel(hotel);
-            return Ok(updateHotel);
+            await _hotel.CreateHotel(hotel);
+            return CreatedAtAction("GetHotel", new { id = hotel.Id }, hotel);
         }
 
         // POST: api/Hotels
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {

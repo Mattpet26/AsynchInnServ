@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
+using AsynchInnServ.Models.Api;
 
 namespace AsynchInnServ.Controllers
 {
@@ -24,16 +25,16 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Room>>> GetRooms()
+        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms()
         {
             return await _room.GetRooms();
         }
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Room>> GetRoom(int id)
+        public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
-            Room room = await _room.GetRoom(id);
+            RoomDTO room = await _room.GetRoom(id);
 
             if (room == null)
             {
@@ -61,9 +62,9 @@ namespace AsynchInnServ.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRoom(int id, Room room)
+        public async Task<IActionResult> PutRoom(int id, RoomDTO room)
         {
-            if (id != room.RoomId)
+            if (id != room.ID)
             {
                 return BadRequest();
             }
@@ -76,10 +77,10 @@ namespace AsynchInnServ.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Room>> PostRoom(Room room)
+        public async Task<ActionResult<RoomDTO>> PostRoom(RoomDTO room)
         {
             await _room.CreateRoom(room);
-            return CreatedAtAction("GetRooms", new { id=room.RoomId }, room);
+            return CreatedAtAction("GetRooms", new { id=room.ID }, room);
         }
 
         // DELETE: api/Rooms/5

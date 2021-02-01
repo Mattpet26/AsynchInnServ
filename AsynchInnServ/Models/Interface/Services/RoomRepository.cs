@@ -1,4 +1,5 @@
 ﻿using AsynchInnServ.Data;
+using AsynchInnServ.Models.Api;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,12 +19,13 @@ namespace AsynchInnServ.Models.Interface.Services
 
         public async Task AddRoomAmmenities(int ammenityId, int roomId)
         {
-            RoomAmmenities ammenity = new RoomAmmenities()
+            RoomAmmenities roomAmenity = new RoomAmmenities()
             {
                 AmmenityId = ammenityId,
                 RoomId = roomId
             };
-            _context.Entry(ammenity).State = EntityState.Added;
+
+            _context.Entry(roomAmenity).State = EntityState.Added;
             await _context.SaveChangesAsync();
         }
 
@@ -34,41 +36,75 @@ namespace AsynchInnServ.Models.Interface.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Room> CreateRoom(Room room)
+        public async Task<RoomDTO> CreateRoom(RoomDTO DTOroom)
         {
-            _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            Room room = new Room()
+            {
+                Name = DTOroom.Name,
+                Layout = DTOroom.Layout
+            };
+            _context.Entry(room).State = EntityState.Added;
             await _context.SaveChangesAsync();
-            return room;
+            DTOroom.ID = room.RoomId;
+            return DTOroom;
         }
 
         public async Task DeleteRoom(int id)
         {
-            Room room = await GetRoom(id);
-            _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            Room room = await _context.Rooms.FindAsync(id);
+            _context.Entry(room).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Room> GetRoom(int id)
+        public async Task<RoomDTO> GetRoom(int id)
         {
-            return await _context.Rooms
-                .Include(x => x.HotelRoom)
-                .ThenInclude(x => x.Hotel)
-                .FirstOrDefaultAsync(x => x.RoomId == id);
-        }
-
-        public async Task<List<Room>> GetRooms()
-        {
-            return await _context.Rooms
-                .Include(x => x.HotelRoom)
-                .ThenInclude(x => x.Hotel)
+            Room room = await _context.Rooms.FindAsync(id);
+            List<RoomAmmenities> roomAmenities = await _context.RoomAmmenities
+                .Where(x => x.RoomId == id)
                 .ToListAsync();
+            List<AmmenitiesDTO> amenitiesList = new List<AmmenitiesDTO>();
+
+            //foreach room, add to the dto list.
+            foreach (var amenity in roomAmenities)
+            {
+                amenitiesList.Add(await new AmmenityRepository(_context).GetAmmenity(amenity.AmmenityId));
+            }
+
+            //create a dto room
+            RoomDTO DTOroom = new RoomDTO()
+            {
+                ID = room.RoomId,
+                Name = room.Name,
+                Layout = room.Layout,
+                Amenities = amenitiesList
+            };
+            return DTOroom;
         }
 
-        public async Task<Room> UpdateRoom(Room room)
+        public async Task<List<RoomDTO>> GetRooms()
         {
-            _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            var list = await _context.Rooms.ToListAsync();
+            var roomList = new List<RoomDTO>();
+
+            foreach (var room in list)
+            {
+                roomList.Add(await GetRoom(room.RoomId));
+            }
+            return roomList;
+        }
+
+        public async Task<RoomDTO> UpdateRoom(RoomDTO DTOroom)
+        {
+            Room room = new Room()
+            {
+                RoomId = DTOroom.ID,
+                Name = DTOroom.Name,
+                Layout = DTOroom.Layout
+            };
+
+            _context.Entry(room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return room;
+            return DTOroom;
         }
     }
 }
