@@ -1,4 +1,5 @@
 ﻿using AsynchInnServ.Data;
+using AsynchInnServ.Models.Api;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -26,28 +27,44 @@ namespace AsynchInnServ.Models.Interface.Services
 
         public async Task DeleteHotel(int id)
         {
-            Hotel hotel = await GetHotel(id);
-            _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            Hotel hotel = await _context.Hotels.FindAsync(id);
+            _context.Entry(hotel).State = EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Hotel> GetHotel(int id)
+        public async Task<HotelDTO> GetHotel(int id)     //Changed to DTO
         {
             Hotel hotel = await _context.Hotels.FindAsync(id);
-            return hotel;
+
+            //convert the hotel to a DTO, then return it
+            HotelDTO DTOhotel = new HotelDTO()
+            {
+                Id = id,
+                City = hotel.City,
+                State = hotel.State,
+                Name = hotel.Name,
+                HotelRooms = await new HotelRoomRepository(_context).GetHotelRooms(hotel.Id)
+            };
+            return DTOhotel;
+            
         }
 
-        public async Task<List<Hotel>> GetHotels()
+        public async Task<List<HotelDTO>> GetHotels()
         {
             var hotels = await _context.Hotels.ToListAsync();
-            return hotels;
+            var hotelList = new List<HotelDTO>();
+
+            foreach (var hotel in hotels)
+            {
+                hotelList.Add(await GetHotel(hotel.Id));
+            }
+            return hotelList;
         }
 
-        public async Task<Hotel> UpdateHotel(Hotel hotel)
+        public async Task UpdateHotel(Hotel hotel)
         {
             _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             await _context.SaveChangesAsync();
-            return hotel;
         }
     }
 }

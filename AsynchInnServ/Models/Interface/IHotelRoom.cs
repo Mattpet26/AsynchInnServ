@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AsynchInnServ.Models.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ namespace AsynchInnServ.Models.Interface
         /// <param name="hotelRoom">HotelRoom being added</param>
         /// <param name="hotelId">unique Hotel id</param>
         /// <returns>a created hotel room</returns>
-        Task<HotelRoom> CreateRoom(HotelRoom hotelRoom, int hotelId);
+        Task<HotelRoomDTO> CreateRoom(HotelRoomDTO hotelRoom, int hotelId);
 
         /// <summary>
         /// Gets all HotelRooms
         /// </summary>
         /// <param name="hotelId">the hotels unique id</param>
         /// <returns>a list of hotel rooms</returns>
-        Task<List<HotelRoom>> GetHotelRooms(int hotelId);
+        Task<List<HotelRoomDTO>> GetHotelRooms(int hotelId);
 
         /// <summary>
         /// Gets a specific HotelRoom
@@ -28,7 +29,7 @@ namespace AsynchInnServ.Models.Interface
         /// <param name="hotelId">unique hotel id</param>
         /// <param name="roomNumber">unique room number</param>
         /// <returns>a single hotel room</returns>
-        Task<HotelRoom> GetHotelRoom(int hotelId, int roomNumber);
+        Task<HotelRoomDTO> GetHotelRoom(int hotelId, int roomNumber);
 
         /// <summary>
         /// Updates a specific HotelRoom
@@ -37,7 +38,7 @@ namespace AsynchInnServ.Models.Interface
         /// <param name="roomNumber">the rooms unique number</param>
         /// <param name="hotelRoom">hotel room being updated</param>
         /// <returns>nothing</returns>
-        Task Update(int hotelId, int roomNumber, HotelRoom hotelRoom);
+        Task Update(int hotelId, int roomNumber, HotelRoomDTO hotelRoom);
 
         /// <summary>
         /// Removes a specific HotelRoom

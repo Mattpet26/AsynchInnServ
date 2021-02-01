@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
+using AsynchInnServ.Models.Api;
 
 namespace AsynchInnServ.Controllers
 {
@@ -24,14 +25,14 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/HotelRooms
         [HttpGet("{hotelId}/Rooms")]
-        public async Task<ActionResult<IEnumerable<HotelRoom>>> GetHotelRooms(int hotelId)
+        public async Task<ActionResult<IEnumerable<HotelRoomDTO>>> GetHotelRooms(int hotelId)
         {
             return await _hotelRoom.GetHotelRooms(hotelId);
         }
 
         // GET: api/HotelRooms/5
         [HttpGet("{hotelId}/Rooms/{roomNumber}")]
-        public async Task<ActionResult<HotelRoom>> GetHotelRoom(int hotelId, int roomNumber)
+        public async Task<ActionResult<HotelRoomDTO>> GetHotelRoom(int hotelId, int roomNumber)
         {
             var hotelRoom = await _hotelRoom.GetHotelRoom(hotelId, roomNumber);
             return hotelRoom;
@@ -39,9 +40,9 @@ namespace AsynchInnServ.Controllers
 
         // PUT: api/HotelRooms/5
         [HttpPut("{hotelId}/Rooms/{roomNumber}")]
-        public async Task<IActionResult> PutHotelRoom(int hotelId, int roomNumber, HotelRoom hotelRoom)
+        public async Task<IActionResult> PutHotelRoom(int hotelId, int roomNumber, HotelRoomDTO hotelRoom)
         {
-            if (hotelId != hotelRoom.HotelId || roomNumber != hotelRoom.RoomNumber)
+            if (hotelId != hotelRoom.HotelID || roomNumber != hotelRoom.RoomNumber)
             {
                 return BadRequest();
             }
@@ -51,10 +52,10 @@ namespace AsynchInnServ.Controllers
 
         // POST: api/HotelRooms
         [HttpPost("{hotelId}/Rooms")]
-        public async Task<ActionResult<HotelRoom>> PostHotelRoom(HotelRoom hotelRoom, int hotelId)
+        public async Task<ActionResult<HotelRoomDTO>> PostHotelRoom(HotelRoomDTO hotelRoom, int hotelId)
         {
             await _hotelRoom.CreateRoom(hotelRoom, hotelId);
-            return CreatedAtAction("GetHotelRoom", new { hotelRoom.HotelId, hotelRoom.RoomNumber }, hotelRoom);
+            return CreatedAtAction("GetHotelRoom", new { hotelRoom.HotelID, hotelRoom.RoomNumber }, hotelRoom);
         }
 
         //DELETE: api/HotelRooms/5

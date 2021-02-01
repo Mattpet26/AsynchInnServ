@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AsynchInnServ.Models.Api;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,20 +13,20 @@ namespace AsynchInnServ.Models.Interface
         /// </summary>
         /// <param name="ammenities">unique new ammenity</param>
         /// <returns>created amenity</returns>
-        Task<Ammenities> CreateAmmenity(Ammenities ammenities);
+        Task<AmmenitiesDTO> CreateAmmenity(AmmenitiesDTO ammenities);
 
         /// <summary>
         /// gets a list of ammenities
         /// </summary>
         /// <returns>list of amenities</returns>
-        Task<List<Ammenities>> GetAmmenities();
+        Task<List<AmmenitiesDTO>> GetAmmenities();
 
         /// <summary>
         /// Gets a unique ammenity
         /// </summary>
         /// <param name="id">ammenity unique id</param>
         /// <returns>single amenity</returns>
-        Task<Ammenities> GetAmmenity(int id);
+        Task<AmmenitiesDTO> GetAmmenity(int id);
 
         /// <summary>
         /// updates an ammenity

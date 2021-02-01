@@ -1,4 +1,5 @@
 ﻿using AsynchInnServ.Data;
+using AsynchInnServ.Models.Api;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,16 @@ namespace AsynchInnServ.Models.Interface.Services
         /// </summary>
         /// <param name="ammenities"></param>
         /// <returns></returns>
-        public async Task<Ammenities> CreateAmmenity(Ammenities ammenities)
+        public async Task<AmmenitiesDTO> CreateAmmenity(AmmenitiesDTO ammenities)
         {
-            _context.Entry(ammenities).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            Ammenities amenity = new Ammenities()
+            {
+                Name = ammenities.Name,
+                Id = ammenities.Id
+            };
+            _context.Entry(amenity).State = EntityState.Added;
             await _context.SaveChangesAsync();
+            ammenities.Id = amenity.Id;
             return ammenities;
         }
 
@@ -35,7 +42,7 @@ namespace AsynchInnServ.Models.Interface.Services
         /// <returns></returns>
         public async Task DeleteAmmenity(int id)
         {
-            Ammenities ammenities = await GetAmmenity(id);
+            Ammenities ammenities = await _context.Ammenities.FindAsync(id);
             _context.Entry(ammenities).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
             await _context.SaveChangesAsync();
         }
@@ -44,10 +51,15 @@ namespace AsynchInnServ.Models.Interface.Services
         /// Get all the amenities
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Ammenities>> GetAmmenities()
+        public async Task<List<AmmenitiesDTO>> GetAmmenities()
         {
             var ammenity = await _context.Ammenities.ToListAsync();
-            return ammenity;
+            var ammenitieslist = new List<AmmenitiesDTO>();
+            foreach (var item in ammenity)
+            {
+                ammenitieslist.Add(await GetAmmenity(item.Id));
+            }
+            return ammenitieslist;
         }
 
         /// <summary>
@@ -55,10 +67,15 @@ namespace AsynchInnServ.Models.Interface.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Ammenities> GetAmmenity(int id)
+        public async Task<AmmenitiesDTO> GetAmmenity(int id)
         {
-            Ammenities ammenities = await _context.Ammenities.FindAsync(id);
-            return ammenities;
+            Ammenities amenity = await _context.Ammenities.FindAsync(id);
+            AmmenitiesDTO DTOAmmenity = new AmmenitiesDTO()
+            {
+                Id = amenity.Id,
+                Name = amenity.Name
+            };
+            return DTOAmmenity;
         }
 
         /// <summary>

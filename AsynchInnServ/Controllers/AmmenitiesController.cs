@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
+using AsynchInnServ.Models.Api;
 
 namespace AsynchInnServ.Controllers
 {
@@ -24,16 +25,16 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Ammenities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ammenities>>> GetAmmenities()
+        public async Task<ActionResult<IEnumerable<AmmenitiesDTO>>> GetAmmenities()
         {
             return Ok(await _ammenities.GetAmmenities());
         }
 
         // GET: api/Ammenities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Ammenities>> GetAmmenity(int id)
+        public async Task<ActionResult<AmmenitiesDTO>> GetAmmenity(int id)
         {
-            Ammenities ammenity = await _ammenities.GetAmmenity(id);
+            AmmenitiesDTO ammenity = await _ammenities.GetAmmenity(id);
 
             if (ammenity == null)
             {
@@ -59,10 +60,8 @@ namespace AsynchInnServ.Controllers
         }
 
         // POST: api/Ammenities
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Ammenities>> PostAmmenities(Ammenities ammenities)
+        public async Task<ActionResult<AmmenitiesDTO>> PostAmmenities(AmmenitiesDTO ammenities)
         {
             await _ammenities.CreateAmmenity(ammenities);
             return CreatedAtAction("GetAmmenities", new { id=ammenities.Id}, ammenities);
