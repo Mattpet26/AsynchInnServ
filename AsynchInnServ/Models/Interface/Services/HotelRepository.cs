@@ -17,7 +17,11 @@ namespace AsynchInnServ.Models.Interface.Services
             _context = context;
         }
 
-
+        /// <summary>
+        /// Creates a new Hotel
+        /// </summary>
+        /// <param name="hotel"></param>
+        /// <returns></returns>
         public async Task<Hotel> CreateHotel(Hotel hotel)
         {
             _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Added;
@@ -25,6 +29,11 @@ namespace AsynchInnServ.Models.Interface.Services
             return hotel;
         }
 
+        /// <summary>
+        /// Deletes a single hotel
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task DeleteHotel(int id)
         {
             Hotel hotel = await _context.Hotels.FindAsync(id);
@@ -32,6 +41,11 @@ namespace AsynchInnServ.Models.Interface.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Gets a single hotel
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<HotelDTO> GetHotel(int id)     //Changed to DTO
         {
             Hotel hotel = await _context.Hotels.FindAsync(id);
@@ -49,6 +63,10 @@ namespace AsynchInnServ.Models.Interface.Services
             
         }
 
+        /// <summary>
+        /// Gets a list of hotels
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<HotelDTO>> GetHotels()
         {
             var hotels = await _context.Hotels.ToListAsync();
@@ -61,6 +79,11 @@ namespace AsynchInnServ.Models.Interface.Services
             return hotelList;
         }
 
+        /// <summary>
+        /// Updates a hotel
+        /// </summary>
+        /// <param name="hotel"></param>
+        /// <returns></returns>
         public async Task UpdateHotel(Hotel hotel)
         {
             _context.Entry(hotel).State = Microsoft.EntityFrameworkCore.EntityState.Modified;

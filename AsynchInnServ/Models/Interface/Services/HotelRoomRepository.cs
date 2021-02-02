@@ -17,6 +17,12 @@ namespace AsynchInnServ.Models.Interface.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Creates a new Room
+        /// </summary>
+        /// <param name="hotelRoom"></param>
+        /// <param name="hotelId"></param>
+        /// <returns></returns>
         public async Task<HotelRoomDTO> CreateRoom(HotelRoomDTO hotelRoom, int hotelId)
         {
             HotelRoom room = new HotelRoom() 
@@ -28,15 +34,20 @@ namespace AsynchInnServ.Models.Interface.Services
             };
             _context.Entry(room).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             await _context.SaveChangesAsync();
-            room.RoomId = hotelId;
 
             return hotelRoom;
         }
 
-
+        /// <summary>
+        /// Gets a single HotelRoom
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <param name="roomNumber"></param>
+        /// <returns></returns>
         public async Task<HotelRoomDTO> GetHotelRoom(int hotelId, int roomNumber)
         {
-            //first we find the room, then convert to a DTO, then return dto
+            //first find a specific room for our new DTO
+            //Do I need all these includes? We are looking for a specific room, so maybe?
             var hotelRoom = await _context.HotelRoom
                 .Where(x => x.HotelId == hotelId && x.RoomId == roomNumber)
                 .Include(x => x.Room)
@@ -55,6 +66,11 @@ namespace AsynchInnServ.Models.Interface.Services
             return DTOroom;
         }
 
+        /// <summary>
+        /// Gets a list of HotelRoom
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <returns></returns>
         public async Task<List<HotelRoomDTO>> GetHotelRooms(int hotelId)
         {
             var roomList = await _context.HotelRoom
@@ -70,6 +86,13 @@ namespace AsynchInnServ.Models.Interface.Services
             return hotelRooms;
         }
 
+        /// <summary>
+        /// Updates a single HotelRoom
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <param name="roomNumber"></param>
+        /// <param name="hotelRoomDTO"></param>
+        /// <returns></returns>
         public async Task Update(int hotelId, int roomNumber, HotelRoomDTO hotelRoomDTO)
         {
             var room = new HotelRoom()
@@ -82,6 +105,13 @@ namespace AsynchInnServ.Models.Interface.Services
             _context.Entry(room).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Deletes a HotelRoom
+        /// </summary>
+        /// <param name="hotelId"></param>
+        /// <param name="roomNumber"></param>
+        /// <returns></returns>
         public async Task Delete(int hotelId, int roomNumber)
         {
             HotelRoom room = await _context.HotelRoom

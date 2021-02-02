@@ -17,6 +17,12 @@ namespace AsynchInnServ.Models.Interface.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Add a roomAmmenity
+        /// </summary>
+        /// <param name="ammenityId"></param>
+        /// <param name="roomId"></param>
+        /// <returns>nothing</returns>
         public async Task AddRoomAmmenities(int ammenityId, int roomId)
         {
             RoomAmmenities roomAmenity = new RoomAmmenities()
@@ -29,6 +35,12 @@ namespace AsynchInnServ.Models.Interface.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Remove a room Ammenity
+        /// </summary>
+        /// <param name="ammenityId"></param>
+        /// <param name="roomId"></param>
+        /// <returns>nothing</returns>
         public async Task RemoveRoomAmmenities(int ammenityId, int roomId)
         {
             var result = await _context.RoomAmmenities.FirstOrDefaultAsync(x => x.AmmenityId == ammenityId && x.RoomId == roomId);
@@ -36,19 +48,31 @@ namespace AsynchInnServ.Models.Interface.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Creates a new Room
+        /// </summary>
+        /// <param name="DTOroom"></param>
+        /// <returns>newly created room</returns>
         public async Task<RoomDTO> CreateRoom(RoomDTO DTOroom)
         {
             Room room = new Room()
             {
                 Name = DTOroom.Name,
                 Layout = DTOroom.Layout
+                
             };
             _context.Entry(room).State = EntityState.Added;
             await _context.SaveChangesAsync();
             DTOroom.ID = room.RoomId;
+
             return DTOroom;
         }
 
+        /// <summary>
+        /// Removes a room
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>nothing, deletes room</returns>
         public async Task DeleteRoom(int id)
         {
             Room room = await _context.Rooms.FindAsync(id);
@@ -56,11 +80,36 @@ namespace AsynchInnServ.Models.Interface.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Gets a single room
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>roomdto</returns>
         public async Task<RoomDTO> GetRoom(int id)
         {
+            //This is what john did in class, but I have no clue how to implement this way???
+
+            //return await _context.Rooms
+            //    .Select(room => new RoomDTO
+            //    {
+            //        ID = room.RoomId,
+            //        Name = room.Name,
+            //        Layout = room.Layout,
+            //        Amenities = room.RoomAmmenities
+            //        .Select(x => new AmmenitiesDTO
+            //        { 
+            //            RoomId = x.RoomId,
+            //            AmmenityId = x.AmmenityId,
+   
+            //        }).ToList()
+            //    }).FirstOrDefaultAsync(x => x.ID == id);
             Room room = await _context.Rooms.FindAsync(id);
             List<RoomAmmenities> roomAmenities = await _context.RoomAmmenities
                 .Where(x => x.RoomId == id)
+                .Include(x => x.Ammenities)
+                .ThenInclude(x => x.RoomAmmenities)
+                .ThenInclude(x => x.AmmenityId)
+                .Include(x => x.Room)
                 .ToListAsync();
             List<AmmenitiesDTO> amenitiesList = new List<AmmenitiesDTO>();
 
@@ -81,6 +130,10 @@ namespace AsynchInnServ.Models.Interface.Services
             return DTOroom;
         }
 
+        /// <summary>
+        /// Gets the list of rooms
+        /// </summary>
+        /// <returns>list of roomdto</returns>
         public async Task<List<RoomDTO>> GetRooms()
         {
             var list = await _context.Rooms.ToListAsync();
@@ -91,8 +144,20 @@ namespace AsynchInnServ.Models.Interface.Services
                 roomList.Add(await GetRoom(room.RoomId));
             }
             return roomList;
+
+            //return await _context.RoomsDTO
+            //    .Include(x => x.HotelRoom)
+            //    .ThenInclude(x => x.RoomId)
+            //    .Include(x => x.Layout)
+            //    .Include(x => x.RoomAmmenities)
+            //    .ToListAsync()
         }
 
+        /// <summary>
+        /// Updates a single room
+        /// </summary>
+        /// <param name="DTOroom"></param>
+        /// <returns>updated roomdto</returns>
         public async Task<RoomDTO> UpdateRoom(RoomDTO DTOroom)
         {
             Room room = new Room()
