@@ -31,9 +31,15 @@ C# + .NET
 https://asynchinnserv20210202154614.azurewebsites.net/docs
 
 ## Change Log
+
 01/26/2021 - initial upload of the lab! Stay tuned for more.
+
 01/27/2021 - Dependency Injection succsessful.
+
 01/28/2021 - Added more classes, re-wired controllers+repositories.
+
 2/1/2021 - DTO's implemented.
+
 2/2/2021 - Azure deployment, Swagger and testing!
+
 2/3/2021 - identity+auth implemented.
