@@ -1,9 +1,11 @@
 using AsynchInnServ.Data;
+using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Interface.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +26,7 @@ namespace AsynchInnServ
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            //"Register a service"
             services.AddDbContext<AsynchInnDbContext>(options => {
                 string connectionString = Configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
@@ -31,11 +34,19 @@ namespace AsynchInnServ
             services.AddMvc();
             services.AddControllers();
 
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<AsynchInnDbContext>();
 
+
+            //here it is saying -- I need something of this type, from this.
             services.AddTransient<IHotel, HotelRepository>();
             services.AddTransient<IRoom, RoomRepository>();
             services.AddTransient<IAmmenities, AmmenityRepository>();
             services.AddTransient<IHotelRoom, HotelRoomRepository>();
+            services.AddTransient<IUserService, IdentityUserService>();
 
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -68,7 +79,7 @@ namespace AsynchInnServ
 
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/api/v1/swagger.json", "Matthews school shit");
+                options.SwaggerEndpoint("/api/v1/swagger.json", "Matthews Hotels");
                 options.RoutePrefix = "docs";
             });
 
