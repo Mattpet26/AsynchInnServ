@@ -44,5 +44,6 @@ namespace AsynchInnServ.Data
         public DbSet<Ammenities> Ammenities { get; set; }
         public DbSet<RoomAmmenities> RoomAmmenities { get; set; }
         public DbSet<HotelRoom> HotelRoom { get; set; }
+        public object RoomDTO { get; internal set; }
     }
 }

@@ -40,6 +40,15 @@ namespace AsynchInnServ
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
           );
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Title = "Matthews School",
+                    Version = "v1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,9 +58,19 @@ namespace AsynchInnServ
             {
                 app.UseDeveloperExceptionPage();
             }
-            //push
 
             app.UseRouting();
+
+            app.UseSwagger(options =>
+            {
+                options.RouteTemplate = "/api/{documentName}/swagger.json";
+            });
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/api/v1/swagger.json", "Matthews school shit");
+                options.RoutePrefix = "docs";
+            });
 
             app.UseEndpoints(endpoints =>
             {
