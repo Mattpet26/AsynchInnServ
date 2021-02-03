@@ -106,10 +106,10 @@ namespace AsynchInnServ.Models.Interface.Services
             Room room = await _context.Rooms.FindAsync(id);
             List<RoomAmmenities> roomAmenities = await _context.RoomAmmenities
                 .Where(x => x.RoomId == id)
-                .Include(x => x.Ammenities)
-                .ThenInclude(x => x.RoomAmmenities)
-                .ThenInclude(x => x.AmmenityId)
-                .Include(x => x.Room)
+                //.Include(x => x.Ammenities)
+                //.ThenInclude(x => x.RoomAmmenities)
+                //.ThenInclude(x => x.AmmenityId)
+                //.Include(x => x.Room)
                 .ToListAsync();
             List<AmmenitiesDTO> amenitiesList = new List<AmmenitiesDTO>();
 
