@@ -25,7 +25,7 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Rooms
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoomDTO>>> GetRooms()
+        public async Task<ActionResult<List<RoomDTO>>> GetRooms()
         {
             return await _room.GetRooms();
         }
@@ -69,8 +69,8 @@ namespace AsynchInnServ.Controllers
                 return BadRequest();
             }
 
-            var roomUpdate = await _room.UpdateRoom(room);
-            return Ok(roomUpdate);
+            await _room.UpdateRoom(room);
+            return Ok();
         }
 
         // POST: api/Rooms
@@ -80,7 +80,7 @@ namespace AsynchInnServ.Controllers
         public async Task<ActionResult<RoomDTO>> PostRoom(RoomDTO room)
         {
             await _room.CreateRoom(room);
-            return CreatedAtAction("GetRooms", new { id=room.ID }, room);
+            return CreatedAtAction("GetRoom", new { id=room.ID }, room);
         }
 
         // DELETE: api/Rooms/5
