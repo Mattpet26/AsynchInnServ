@@ -36,3 +36,4 @@ https://asynchinnserv20210202154614.azurewebsites.net/docs
 01/28/2021 - Added more classes, re-wired controllers+repositories.
 2/1/2021 - DTO's implemented.
 2/2/2021 - Azure deployment, Swagger and testing!
+2/3/2021 - identity+auth implemented.
