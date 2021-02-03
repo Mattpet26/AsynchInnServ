@@ -1,4 +1,5 @@
 ﻿using AsynchInnServ.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace AsynchInnServ.Data
 {
-    public class AsynchInnDbContext : DbContext
+    //Change the inheritance, we not take from identityDbContext
+    //This wraps our system, so everything knows what an AppUser is.
+    public class AsynchInnDbContext : IdentityDbContext<AppUser>
     {
         public AsynchInnDbContext(DbContextOptions options) : base(options)
         {
@@ -16,8 +19,9 @@ namespace AsynchInnServ.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //We need identity to do it's pre-load stuff/work before we do.
+            base.OnModelCreating(modelBuilder);
 
-            //seeding
             modelBuilder.Entity<RoomAmmenities>().HasKey(x => new { x.AmmenityId, x.RoomId });
             modelBuilder.Entity<HotelRoom>().HasKey(x => new { x.HotelId, x.RoomNumber });
 
