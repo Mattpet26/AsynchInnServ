@@ -21,8 +21,8 @@ You can now run the program with the green start button!
 
 ## Example
 ![image](hotelSetup.PNG)
-![image](getRooms.PNG)
-![image](getAmmenities.PNG)
+![image](swash.PNG)
+![image](swash1.PNG)
 
 ## Architecture
 C# + .NET
@@ -35,3 +35,4 @@ https://asynchinnserv20210202154614.azurewebsites.net/
 01/27/2021 - Dependency Injection succsessful.
 01/28/2021 - Added more classes, re-wired controllers+repositories.
 2/1/2021 - DTO's implemented.
+2/2/2021 - Azure deployment, Swagger and testing!
