@@ -28,7 +28,7 @@ You can now run the program with the green start button!
 C# + .NET
 
 ## Deployed App via Azure
-https://asynchinnserv20210202154614.azurewebsites.net/
+https://asynchinnserv20210202154614.azurewebsites.net/docs
 
 ## Change Log
 01/26/2021 - initial upload of the lab! Stay tuned for more.
