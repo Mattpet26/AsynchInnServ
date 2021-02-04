@@ -8,6 +8,9 @@ This program is an exercise with the ASP.NET Core framework, demonstrated by the
 
 This program uses a dependency injection implementation. Each controller directs it's own CRUD operations for each class. DTOs are implemented to transfer data between itself and the UI layer. This reduces the amount of data that is needed to be sent across the wire.
 
+## Deployed App via Azure
+https://asynchinnserv20210202154614.azurewebsites.net/docs
+
 ## Getting Started
 Clone the repository down to your local machine with: Git clone clonedRepoHere
 
@@ -26,9 +29,6 @@ You can now run the program with the green start button!
 
 ## Architecture
 C# + .NET
-
-## Deployed App via Azure
-https://asynchinnserv20210202154614.azurewebsites.net/docs
 
 ## Change Log
 
