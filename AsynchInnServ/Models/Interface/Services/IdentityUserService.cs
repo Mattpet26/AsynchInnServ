@@ -37,11 +37,13 @@ namespace AsynchInnServ.Models.Interface.Services
             //if the result succeeds, we create a dto user and return it
             if (result.Succeeded)
             {
+                //The data.Roles is returning a cancellationtoken?
                 await UserManager.AddToRolesAsync(user, data.Roles);
                 UserDTO newuser = new UserDTO
                 {
                     Username = user.UserName,
-                    Id = user.Id
+                    Id = user.Id,
+                    Token = await tokenService.GetToken(user, System.TimeSpan.FromMinutes(5))
                 };
                 return newuser;
             }
@@ -82,7 +84,9 @@ namespace AsynchInnServ.Models.Interface.Services
             return new UserDTO
             {
                 Id = user.Id,
-                Username = user.UserName
+                Username = user.UserName,
+                Token = await tokenService.GetToken(user, System.TimeSpan.FromMinutes(5))
+
             };
         }
     }

@@ -35,12 +35,12 @@ namespace AsynchInnServ.Models.Interface.Services
         public static SecurityKey GetSecurityKey(IConfiguration configuration)
         {
             var secret = configuration["JWT:Secret"];
-            var secretBytes = Encoding.UTF8.GetBytes(secret);
 
             if (secret == null)
             {
                 throw new InvalidOperationException("No JWT secret found");
             }
+            var secretBytes = Encoding.UTF8.GetBytes(secret);
 
             return new SymmetricSecurityKey(secretBytes);
         }
