@@ -9,6 +9,7 @@ using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Api;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsynchInnServ.Controllers
 {
@@ -25,6 +26,8 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/HotelRooms
         [HttpGet("{hotelId}/Rooms")]
+        [Authorize(Policy = "Agent")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<HotelRoomDTO>>> GetHotelRooms(int hotelId)
         {
             return await _hotelRoom.GetHotelRooms(hotelId);
@@ -32,6 +35,8 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/HotelRooms/5
         [HttpGet("{hotelId}/Rooms/{roomNumber}")]
+        [Authorize(Policy = "Agent")]
+        [AllowAnonymous]
         public async Task<ActionResult<HotelRoomDTO>> GetHotelRoom(int hotelId, int roomNumber)
         {
             var hotelRoom = await _hotelRoom.GetHotelRoom(hotelId, roomNumber);
@@ -40,6 +45,8 @@ namespace AsynchInnServ.Controllers
 
         // PUT: api/HotelRooms/5
         [HttpPut("{hotelId}/Rooms/{roomNumber}")]
+        [Authorize(Policy = "Agent")]
+
         public async Task<IActionResult> PutHotelRoom(int hotelId, int roomNumber, HotelRoomDTO hotelRoom)
         {
             if (hotelId != hotelRoom.HotelID || roomNumber != hotelRoom.RoomNumber)
@@ -52,6 +59,8 @@ namespace AsynchInnServ.Controllers
 
         // POST: api/HotelRooms
         [HttpPost("{hotelId}/Rooms")]
+        [Authorize(Policy = "PropertyManager")]
+
         public async Task<ActionResult<HotelRoomDTO>> PostHotelRoom(HotelRoomDTO hotelRoom, int hotelId)
         {
             await _hotelRoom.CreateRoom(hotelRoom, hotelId);
@@ -60,6 +69,8 @@ namespace AsynchInnServ.Controllers
 
         //DELETE: api/HotelRooms/5
         [HttpDelete("{hotelId}/Rooms/{roomNumber}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult<HotelRoom>> Delete(int hotelId, int roomNumber)
         {
             await _hotelRoom.Delete(hotelId, roomNumber);

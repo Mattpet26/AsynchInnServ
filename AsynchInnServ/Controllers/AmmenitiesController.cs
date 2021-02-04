@@ -9,6 +9,7 @@ using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Api;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsynchInnServ.Controllers
 {
@@ -25,6 +26,8 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Ammenities
         [HttpGet]
+        [Authorize(Policy = "PropertyManager")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<AmmenitiesDTO>>> GetAmmenities()
         {
             return Ok(await _ammenities.GetAmmenities());
@@ -32,6 +35,9 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Ammenities/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "PropertyManager")]
+        [AllowAnonymous]
+
         public async Task<ActionResult<AmmenitiesDTO>> GetAmmenity(int id)
         {
             AmmenitiesDTO ammenity = await _ammenities.GetAmmenity(id);
@@ -48,6 +54,8 @@ namespace AsynchInnServ.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize(Policy = "PropertyManager")]
+
         public async Task<IActionResult> PutAmmenities(int id, Ammenities ammenities)
         {
             if (id != ammenities.Id)
@@ -61,6 +69,8 @@ namespace AsynchInnServ.Controllers
 
         // POST: api/Ammenities
         [HttpPost]
+        [Authorize(Policy = "PropertyManager")]
+
         public async Task<ActionResult<AmmenitiesDTO>> PostAmmenities(AmmenitiesDTO ammenities)
         {
             await _ammenities.CreateAmmenity(ammenities);
@@ -69,6 +79,8 @@ namespace AsynchInnServ.Controllers
 
         // DELETE: api/Ammenities/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult<Ammenities>> DeleteAmmenities(int id)
         {
             await _ammenities.DeleteAmmenity(id);

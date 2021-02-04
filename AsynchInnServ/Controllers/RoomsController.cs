@@ -9,6 +9,7 @@ using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Api;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsynchInnServ.Controllers
 {
@@ -25,6 +26,8 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Rooms
         [HttpGet]
+        [Authorize(Policy = "DistrictManager")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<RoomDTO>>> GetRooms()
         {
             return await _room.GetRooms();
@@ -32,6 +35,8 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Rooms/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+        [AllowAnonymous]
         public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
             RoomDTO room = await _room.GetRoom(id);
@@ -45,6 +50,8 @@ namespace AsynchInnServ.Controllers
         }
 
         [HttpPost("{roomId}/Amenity/{amenityId}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult> AddRoomAmenityToRoom(int amenityId, int roomId)
         {
             await _room.AddRoomAmmenities(amenityId, roomId);
@@ -52,6 +59,8 @@ namespace AsynchInnServ.Controllers
         }
 
         [HttpDelete("{roomId}/Amenity/{amenityId}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult> RemoveRoomAmenityFromRoom(int amenityId, int roomId)
         {
             await _room.RemoveRoomAmmenities(amenityId, roomId);
@@ -62,6 +71,8 @@ namespace AsynchInnServ.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<IActionResult> PutRoom(int id, RoomDTO room)
         {
             if (id != room.ID)
@@ -77,6 +88,8 @@ namespace AsynchInnServ.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Authorize(Policy = "Agent")]
+
         public async Task<ActionResult<RoomDTO>> PostRoom(RoomDTO room)
         {
             await _room.CreateRoom(room);
@@ -85,6 +98,8 @@ namespace AsynchInnServ.Controllers
 
         // DELETE: api/Rooms/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult<Room>> DeleteRoom(int id)
         {
             await _room.DeleteRoom(id);

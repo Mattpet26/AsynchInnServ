@@ -9,6 +9,7 @@ using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Api;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AsynchInnServ.Controllers
 {
@@ -25,6 +26,7 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Hotels
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<HotelDTO>>> GetHotels()
         {
             return Ok(await _hotel.GetHotels());
@@ -32,6 +34,7 @@ namespace AsynchInnServ.Controllers
 
         // GET: api/Hotels/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<HotelDTO>> GetHotel(int id)
         {
             //SELECT * FROM hotel WHERE id = {id}
@@ -48,6 +51,8 @@ namespace AsynchInnServ.Controllers
 
         // PUT: api/Hotels/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
             if (id != hotel.Id)
@@ -61,6 +66,8 @@ namespace AsynchInnServ.Controllers
 
         // POST: api/Hotels
         [HttpPost]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult<Hotel>> PostHotel(Hotel hotel)
         {
             await _hotel.CreateHotel(hotel);
@@ -69,6 +76,8 @@ namespace AsynchInnServ.Controllers
 
         // DELETE: api/Hotels/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "DistrictManager")]
+
         public async Task<ActionResult<Hotel>> DeleteHotel(int id)
         {
             await _hotel.DeleteHotel(id);
