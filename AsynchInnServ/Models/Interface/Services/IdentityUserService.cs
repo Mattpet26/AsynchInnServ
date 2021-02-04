@@ -20,6 +20,12 @@ namespace AsynchInnServ.Models.Interface.Services
             tokenService = jwtTokenService;
         }
 
+        /// <summary>
+        /// registers a new user
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="modelState"></param>
+        /// <returns>userdto created</returns>
         public async Task<UserDTO> Register(RegisterUser data, ModelStateDictionary modelState)
         {
             var user = new AppUser
@@ -64,6 +70,13 @@ namespace AsynchInnServ.Models.Interface.Services
 
             return null;
         }
+
+        /// <summary>
+        /// authenticates a user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns>returns authed userDTO</returns>
         public async Task<UserDTO> Authenticate(string username, string password)
         {
             var user = await UserManager.FindByNameAsync(username);
@@ -78,6 +91,12 @@ namespace AsynchInnServ.Models.Interface.Services
             }
             return null;
         }
+
+        /// <summary>
+        /// returns a user
+        /// </summary>
+        /// <param name="principal"></param>
+        /// <returns>returns a user</returns>
         public async Task<UserDTO> GetUser(ClaimsPrincipal principal)
         {
             var user = await UserManager.GetUserAsync(principal);

@@ -20,6 +20,12 @@ namespace AsynchInnServ.Models.Interface.Services
             configuration = config;
             signinManager = manager;
         }
+
+        /// <summary>
+        /// Gets tokenvalidation parameters
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns>TokenValidationParameters</returns>
         public static TokenValidationParameters GetValidationParams(IConfiguration configuration)
         {
             return new TokenValidationParameters
@@ -32,6 +38,11 @@ namespace AsynchInnServ.Models.Interface.Services
 
         }
         //IConfiguration 
+        /// <summary>
+        /// gets the sec key
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns>securitykey</returns>
         public static SecurityKey GetSecurityKey(IConfiguration configuration)
         {
             var secret = configuration["JWT:Secret"];
@@ -44,7 +55,12 @@ namespace AsynchInnServ.Models.Interface.Services
 
             return new SymmetricSecurityKey(secretBytes);
         }
-
+        /// <summary>
+        /// gets a token
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="expiresIn"></param>
+        /// <returns>token</returns>
         public async Task<string> GetToken(AppUser user, System.TimeSpan expiresIn)
         {
             var principal = await signinManager.CreateUserPrincipalAsync(user);
