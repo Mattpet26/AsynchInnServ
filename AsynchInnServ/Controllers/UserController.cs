@@ -1,6 +1,7 @@
 ﻿using AsynchInnServ.Models;
 using AsynchInnServ.Models.Api;
 using AsynchInnServ.Models.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -21,6 +22,7 @@ namespace AsynchInnServ.Controllers
         }
 
         [HttpPost("Register")]
+
         //this.ModelState ------- comes directly in from MVC / Models
 
         //Either we get a good user OR we throw a modelstate error.
@@ -46,6 +48,14 @@ namespace AsynchInnServ.Controllers
                 return user;
             }
             return Unauthorized();
+        }
+
+        [Authorize(Roles = "Admin")]
+        //[Authorize(Policy = "create")]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDTO>> Me()
+        {
+            return await Userservice.GetUser(this.User);
         }
     }
 }

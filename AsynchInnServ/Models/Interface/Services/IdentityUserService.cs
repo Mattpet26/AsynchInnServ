@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AsynchInnServ.Models.Interface.Services
@@ -12,9 +13,11 @@ namespace AsynchInnServ.Models.Interface.Services
     {
         //inject a usermanager
         private UserManager<AppUser> UserManager;
-        public IdentityUserService(UserManager<AppUser> manager)
+        private JwtTokenService tokenService;
+        public IdentityUserService(UserManager<AppUser> manager, JwtTokenService jwtTokenService)
         {
             UserManager = manager;
+            tokenService = jwtTokenService;
         }
 
         public async Task<UserDTO> Register(RegisterUser data, ModelStateDictionary modelState)
@@ -28,11 +31,13 @@ namespace AsynchInnServ.Models.Interface.Services
 
             //identity does the hashing for passwords for us! Neat!
             //identity also comes with requirements. Password must be a length, contain numbers, uppercase, ect.
+
             var result = await UserManager.CreateAsync(user, data.Password);
 
             //if the result succeeds, we create a dto user and return it
             if (result.Succeeded)
             {
+                await UserManager.AddToRolesAsync(user, data.Roles);
                 UserDTO newuser = new UserDTO
                 {
                     Username = user.UserName,
@@ -65,10 +70,20 @@ namespace AsynchInnServ.Models.Interface.Services
                 return new UserDTO
                 {
                     Id = user.Id,
-                    Username = user.UserName
+                    Username = user.UserName,
+                    Token = await tokenService.GetToken(user, System.TimeSpan.FromMinutes(5))
                 };
             }
             return null;
+        }
+        public async Task<UserDTO> GetUser(ClaimsPrincipal principal)
+        {
+            var user = await UserManager.GetUserAsync(principal);
+            return new UserDTO
+            {
+                Id = user.Id,
+                Username = user.UserName
+            };
         }
     }
 }

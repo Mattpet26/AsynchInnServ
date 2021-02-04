@@ -2,6 +2,7 @@ using AsynchInnServ.Data;
 using AsynchInnServ.Models;
 using AsynchInnServ.Models.Interface;
 using AsynchInnServ.Models.Interface.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,8 +41,32 @@ namespace AsynchInnServ
             })
                 .AddEntityFrameworkStores<AsynchInnDbContext>();
 
+            //bring token in
+            services.AddScoped<JwtTokenService>();
 
-            //here it is saying -- I need something of this type, from this.
+            //This will eventually allow us to decorate/annotate our routes
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = JwtTokenService.GetValidationParams(Configuration);
+                });
+
+            services.AddAuthorization(options =>
+            {
+                // Add "Name of Policy", and the Lambda returns a definition
+                options.AddPolicy("create", policy => policy.RequireClaim("permissions", "create"));
+                options.AddPolicy("update", policy => policy.RequireClaim("permissions", "update"));
+                options.AddPolicy("delete", policy => policy.RequireClaim("permissions", "delete"));
+                options.AddPolicy("deposit", policy => policy.RequireClaim("permissions", "deposit"));
+            });
+
+            //Register dependency injection services
+            //here it is saying -- whenever I see Iblahblah, use this repository.
             services.AddTransient<IHotel, HotelRepository>();
             services.AddTransient<IRoom, RoomRepository>();
             services.AddTransient<IAmmenities, AmmenityRepository>();
@@ -63,6 +88,7 @@ namespace AsynchInnServ
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        //Hey app, start using this stuff!
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -71,7 +97,8 @@ namespace AsynchInnServ
             }
 
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSwagger(options =>
             {
                 options.RouteTemplate = "/api/{documentName}/swagger.json";
